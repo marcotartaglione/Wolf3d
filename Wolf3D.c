@@ -38,13 +38,13 @@ void drawColumn(int column, float normalizedWidthPerc, float distance, Texture* 
     int wallHeight = (int)((float)frame.height / distance);
     int offset = wallHeight != frame.height ? (int)((frame.height - wallHeight) * 0.5) : 0;
 
-    int pixelInHeight = MIN(wallHeight, frame.height);
-    float heightStep = (float)pixelInHeight / (float)texture->height;
+    float heightStep = (float)wallHeight / (float)texture->height;
     float currentStep = heightStep;
 
     float widthOffset = (float)texture->width * normalizedWidthPerc;
     int textureIndex = 0;
-    for (int i = 0; i < pixelInHeight; ++i) {
+
+    for (int i = -MIN(0, offset); i < frame.height - offset && textureIndex < texture->height - 2; ++i) {
         if (i > currentStep) {
             currentStep += heightStep;
             textureIndex++;
@@ -55,10 +55,9 @@ void drawColumn(int column, float normalizedWidthPerc, float distance, Texture* 
         u32int g = texture->data[textureDataIndex + 1] << 8;
         u32int b = texture->data[textureDataIndex + 2];
 
-        frame.pixels[(MAX(0, offset) + i) * frame.width + column] = r | g | b;
+        frame.pixels[(offset + i) * frame.width + column] = r | g | b;
     }
 }
-
 
 void gameLoop() {
     drawBackground();

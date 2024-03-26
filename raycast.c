@@ -59,5 +59,5 @@ void raycast(GameObj player, float angle, Tile map[MAP_SIZE * MAP_SIZE], float *
         *hitPerc = *hitPerc - (int)*hitPerc;
     }
 
-    *distance = ABS(*distance);
+    *distance = ABS(*distance) * cos(angle - player.angle);
 }
