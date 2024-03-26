@@ -49,13 +49,6 @@ cmake_ninja_workdir = C$:\Users\akena\CLionProjects\Wolf3d\cmake-build-debug\
 
 build cmake_object_order_depends_target_Wolf3d: phony || CMakeFiles\Wolf3d.dir
 
-build CMakeFiles\Wolf3d.dir\window.c.obj: C_COMPILER__Wolf3d_unscanned_Debug C$:\Users\akena\CLionProjects\Wolf3d\window.c || cmake_object_order_depends_target_Wolf3d
-  FLAGS = /DWIN32 /D_WINDOWS /Ob0 /Od /RTC1 -MDd -Zi
-  OBJECT_DIR = CMakeFiles\Wolf3d.dir
-  OBJECT_FILE_DIR = CMakeFiles\Wolf3d.dir
-  TARGET_COMPILE_PDB = CMakeFiles\Wolf3d.dir\
-  TARGET_PDB = Wolf3d.pdb
-
 build CMakeFiles\Wolf3d.dir\Wolf3D.c.obj: C_COMPILER__Wolf3d_unscanned_Debug C$:\Users\akena\CLionProjects\Wolf3d\Wolf3D.c || cmake_object_order_depends_target_Wolf3d
   FLAGS = /DWIN32 /D_WINDOWS /Ob0 /Od /RTC1 -MDd -Zi
   OBJECT_DIR = CMakeFiles\Wolf3d.dir
@@ -70,6 +63,27 @@ build CMakeFiles\Wolf3d.dir\raycast.c.obj: C_COMPILER__Wolf3d_unscanned_Debug C$
   TARGET_COMPILE_PDB = CMakeFiles\Wolf3d.dir\
   TARGET_PDB = Wolf3d.pdb
 
+build CMakeFiles\Wolf3d.dir\texture.c.obj: C_COMPILER__Wolf3d_unscanned_Debug C$:\Users\akena\CLionProjects\Wolf3d\texture.c || cmake_object_order_depends_target_Wolf3d
+  FLAGS = /DWIN32 /D_WINDOWS /Ob0 /Od /RTC1 -MDd -Zi
+  OBJECT_DIR = CMakeFiles\Wolf3d.dir
+  OBJECT_FILE_DIR = CMakeFiles\Wolf3d.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Wolf3d.dir\
+  TARGET_PDB = Wolf3d.pdb
+
+build CMakeFiles\Wolf3d.dir\window.c.obj: C_COMPILER__Wolf3d_unscanned_Debug C$:\Users\akena\CLionProjects\Wolf3d\window.c || cmake_object_order_depends_target_Wolf3d
+  FLAGS = /DWIN32 /D_WINDOWS /Ob0 /Od /RTC1 -MDd -Zi
+  OBJECT_DIR = CMakeFiles\Wolf3d.dir
+  OBJECT_FILE_DIR = CMakeFiles\Wolf3d.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Wolf3d.dir\
+  TARGET_PDB = Wolf3d.pdb
+
+build CMakeFiles\Wolf3d.dir\vendor\stb\stb_image.c.obj: C_COMPILER__Wolf3d_unscanned_Debug C$:\Users\akena\CLionProjects\Wolf3d\vendor\stb\stb_image.c || cmake_object_order_depends_target_Wolf3d
+  FLAGS = /DWIN32 /D_WINDOWS /Ob0 /Od /RTC1 -MDd -Zi
+  OBJECT_DIR = CMakeFiles\Wolf3d.dir
+  OBJECT_FILE_DIR = CMakeFiles\Wolf3d.dir\vendor\stb
+  TARGET_COMPILE_PDB = CMakeFiles\Wolf3d.dir\
+  TARGET_PDB = Wolf3d.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Wolf3d
@@ -78,7 +92,7 @@ build CMakeFiles\Wolf3d.dir\raycast.c.obj: C_COMPILER__Wolf3d_unscanned_Debug C$
 #############################################
 # Link the executable Wolf3d.exe
 
-build Wolf3d.exe: C_EXECUTABLE_LINKER__Wolf3d_Debug CMakeFiles\Wolf3d.dir\window.c.obj CMakeFiles\Wolf3d.dir\Wolf3D.c.obj CMakeFiles\Wolf3d.dir\raycast.c.obj
+build Wolf3d.exe: C_EXECUTABLE_LINKER__Wolf3d_Debug CMakeFiles\Wolf3d.dir\Wolf3D.c.obj CMakeFiles\Wolf3d.dir\raycast.c.obj CMakeFiles\Wolf3d.dir\texture.c.obj CMakeFiles\Wolf3d.dir\window.c.obj CMakeFiles\Wolf3d.dir\vendor\stb\stb_image.c.obj
   FLAGS = /DWIN32 /D_WINDOWS /Ob0 /Od /RTC1 -MDd -Zi
   LINK_FLAGS = /machine:X86 /debug /INCREMENTAL /subsystem:windows
   LINK_LIBRARIES = kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib

@@ -4,8 +4,8 @@
 #include <windows.h>
 #include "defs.h"
 
-#define WND_DFLT_WIDTH   320
-#define WND_DFLT_HEIGHT  256
+#define WND_DFLT_WIDTH   1280
+#define WND_DFLT_HEIGHT  800
 
 #define WND_CLASS       WNDCLASS
 #define WND_HANDLE      HWND
@@ -38,7 +38,8 @@ extern Frame frame;
 //
 // External functions
 //
-void startWindow(WND_INSTANCE hInstance, void (*gameLoopFunction)());
+static void (*gameKeyCallback)(WPARAM);
+void startWindow(WND_INSTANCE hInstance, void (*gameLoopFunction)(), void (*gameKeyCallbackFunction)(WPARAM));
 
 //
 // Internal functions

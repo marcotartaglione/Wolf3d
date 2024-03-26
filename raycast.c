@@ -37,7 +37,7 @@ void raycast(GameObj player, float angle, Tile map[MAP_SIZE * MAP_SIZE], float *
         sideDistY = (mapY + 1.0 - rayPosY) * deltaDistY;
     }
 
-    while (map[(int)mapX + (int)mapY * MAP_SIZE].type == TILE_NONE) {
+    while (map[(int)mapX + (int)mapY * MAP_SIZE].type == TILE_TYPE_NONE) {
         if (sideDistX < sideDistY) {
             sideDistX += deltaDistX;
             mapX += stepX;
@@ -59,5 +59,5 @@ void raycast(GameObj player, float angle, Tile map[MAP_SIZE * MAP_SIZE], float *
         *hitPerc = *hitPerc - (int)*hitPerc;
     }
 
-    *distance /= rayDirX;
+    *distance = ABS(*distance);
 }

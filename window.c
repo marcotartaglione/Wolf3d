@@ -3,7 +3,7 @@
 
 Frame frame = { 0 };
 
-void startWindow(WND_INSTANCE hInstance, void (*gameLoopFunction)()) {
+void startWindow(WND_INSTANCE hInstance, void (*gameLoopFunction)(), void (*gameKeyCallbackFunction)(u32int)) {
     windowClass.lpfnWndProc = WindowProcessMessage;
     windowClass.hInstance = hInstance;
     windowClass.lpszClassName = title;
@@ -15,8 +15,18 @@ void startWindow(WND_INSTANCE hInstance, void (*gameLoopFunction)()) {
     frame_bitmap_info.bmiHeader.biCompression = BI_RGB;
     frame_device_context = CreateCompatibleDC(0);
 
+    // Get screen dimensions
+    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+    // Calculate window position to center it
+    int windowX = (screenWidth - WND_DFLT_WIDTH) / 2;
+    int windowY = (screenHeight - WND_DFLT_HEIGHT) / 2;
+
     windowHandle = CreateWindow(title, title, WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-                                WND_DFLT_WIDTH, WND_DFLT_HEIGHT, WND_DFLT_WIDTH, WND_DFLT_HEIGHT, NULL, NULL, hInstance, NULL);
+                                windowX, windowY, WND_DFLT_WIDTH, WND_DFLT_HEIGHT, NULL, NULL, hInstance, NULL);
+
+    gameKeyCallback = gameKeyCallbackFunction;
 
     if (windowHandle == NULL) {
         exit(-1);
@@ -27,10 +37,12 @@ void startWindow(WND_INSTANCE hInstance, void (*gameLoopFunction)()) {
         while (PeekMessage(&message, NULL, 0, 0, PM_REMOVE)) {
             DispatchMessage(&message);
         }
+
         gameLoopFunction();
         redraw();
     }
 }
+
 
 static void redraw() {
     InvalidateRect(windowHandle, NULL, FALSE);
@@ -38,6 +50,8 @@ static void redraw() {
 }
 
 static LRESULT CALLBACK WindowProcessMessage(HWND window_handle, UINT message, WPARAM wParam, LPARAM lParam) {
+    int a = 0;
+
     switch (message) {
         case WM_QUIT:
         case WM_DESTROY: {
@@ -50,7 +64,7 @@ static LRESULT CALLBACK WindowProcessMessage(HWND window_handle, UINT message, W
             device_context = BeginPaint(window_handle, &paint);
             BitBlt(device_context,
                    paint.rcPaint.left, paint.rcPaint.top,
-                   paint.rcPaint.right - paint.rcPaint.left, paint.rcPaint.bottom - paint.rcPaint.top,
+                   paint.rcPaint.right - paint.rcPaint.left,paint.rcPaint.bottom - paint.rcPaint.top,
                    frame_device_context,
                    paint.rcPaint.left, paint.rcPaint.top,
                    SRCCOPY);
@@ -67,6 +81,10 @@ static LRESULT CALLBACK WindowProcessMessage(HWND window_handle, UINT message, W
 
             frame.width = LOWORD(lParam);
             frame.height = HIWORD(lParam);
+        } break;
+
+        case WM_KEYDOWN: {
+            gameKeyCallback(wParam);
         } break;
 
         default: {
