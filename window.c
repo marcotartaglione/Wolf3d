@@ -15,11 +15,9 @@ void startWindow(WND_INSTANCE hInstance, void (*gameLoopFunction)(), void (*game
     frame_bitmap_info.bmiHeader.biCompression = BI_RGB;
     frame_device_context = CreateCompatibleDC(0);
 
-    // Get screen dimensions
     int screenWidth = GetSystemMetrics(SM_CXSCREEN);
     int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
-    // Calculate window position to center it
     int windowX = (screenWidth - WND_DFLT_WIDTH) / 2;
     int windowY = (screenHeight - WND_DFLT_HEIGHT) / 2;
 
@@ -50,8 +48,6 @@ static void redraw() {
 }
 
 static LRESULT CALLBACK WindowProcessMessage(HWND window_handle, UINT message, WPARAM wParam, LPARAM lParam) {
-    int a = 0;
-
     switch (message) {
         case WM_QUIT:
         case WM_DESTROY: {

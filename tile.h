@@ -14,7 +14,9 @@ typedef enum {
 
 typedef enum {
     TILE_STATE_IDLE,
-    TILE_STATE_MOVING
+    TILE_STATE_MOVING,
+    TILE_STATE_SHOOTING,
+    TILE_STATE_DEAD,
 } TileState;
 
 typedef struct {
