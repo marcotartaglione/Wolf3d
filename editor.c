@@ -3,3 +3,10 @@
 //
 #include "editor.h"
 
+void editorLoop() {
+
+}
+
+void editorKey(u32int key) {
+
+}

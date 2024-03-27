@@ -5,6 +5,7 @@
 // Constants
 //
 #define ENTRY_POINT (WINAPI wWinMain)
+#define WOLF3D_EDITOR_MODE
 
 #define PI                  3.14159265359   // PI           -> 180deg
 #define PI_times_2          6.28318530718   // PI * 2       ->   0deg / 360deg

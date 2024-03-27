@@ -57,10 +57,12 @@ static LRESULT CALLBACK WindowProcessMessage(HWND window_handle, UINT message, W
             closeWindow();
         } break;
 
+#ifndef WOLF3D_EDITOR_MODE
         case WM_SETCURSOR: {
             SetCursor(NULL);
             return true;
         }
+#endif
 
         case WM_PAINT: {
             static PAINTSTRUCT paint;

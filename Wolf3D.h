@@ -8,6 +8,7 @@
 #include "texture.h"
 #include "window.h"
 #include "game.h"
+#include "editor.h"
 
 Texture** walls;
 

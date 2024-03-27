@@ -5,7 +5,7 @@
 #include "Wolf3D.h"
 
 static void init() {
-    walls = loadWalls("w3d_textures_fix\\converted_images\\");
+    walls = loadWalls("w3d_textures_fix\\walls\\");
 }
 
 int ENTRY_POINT(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
@@ -14,7 +14,7 @@ int ENTRY_POINT(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, in
 #ifndef WOLF3D_EDITOR_MODE
     startWindow(hInstance, gameLoop, gameKey);
 #else
-    startWindow(hInstance, gameLoop, gameKey);
+    startWindow(hInstance, editorLoop, editorKey);
 #endif
 
 }
