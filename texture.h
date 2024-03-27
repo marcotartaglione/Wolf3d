@@ -8,6 +8,7 @@
 #include "defs.h"
 
 #include "vendor/stb/stb_image.h"
+#include "tile.h"
 
 typedef struct {
     u32int  width, height;
@@ -16,5 +17,6 @@ typedef struct {
 } Texture;
 
 Texture* readBMP(char* filename);
+Texture** loadWalls(char* directory);
 
 #endif //WOLF3D_TEXTURE_H

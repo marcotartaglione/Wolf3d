@@ -2,8 +2,9 @@
 // Created by Marco on 24/03/2024.
 //
 #include "raycast.h"
+#include <math.h>
 
-void raycast(GameObj player, float angle, Tile map[MAP_SIZE * MAP_SIZE], float *distance, float *side, float *hitPerc) {
+Tile* raycast(GameObj player, float angle, Tile map[MAP_SIZE * MAP_SIZE], float *distance, float *side, float *hitPerc) {
     float rayPosX = player.x;
     float rayPosY = player.y;
     float rayDirX = cos(angle);
@@ -60,4 +61,6 @@ void raycast(GameObj player, float angle, Tile map[MAP_SIZE * MAP_SIZE], float *
     }
 
     *distance = ABS(*distance) * cos(angle - player.angle);
+
+    return &map[(int)mapX + (int)mapY * MAP_SIZE];
 }

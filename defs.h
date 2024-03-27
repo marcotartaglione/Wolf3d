@@ -11,7 +11,7 @@
 #define PI_div_2            1.57079632679   // PI / 2       ->  90deg
 #define PI_times_3_div_2    4.71238898038   // PI * 3 / 2   -> 270deg
 
-#define MAP_SIZE    9
+#define MAP_SIZE    64
 #define MAP_NUMBER  1
 
 #define PLAYER_FOV PI_div_2
@@ -44,13 +44,6 @@ typedef enum {
     DIRECTION_WEST,
     DIRECTION_EAST
 } Direction;
-
-typedef struct {
-    float       x, y;
-    float       angle;
-    State       state;
-    Direction   direction;
-} GameObj;
 
 //
 // Functions

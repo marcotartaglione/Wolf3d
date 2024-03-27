@@ -7,8 +7,8 @@
 
 #include "defs.h"
 #include "tile.h"
-#include <math.h>
+#include "gameObject.h"
 
-void raycast(GameObj player, float angle, Tile map[], float *distance, float *side, float *hitPerc);
+Tile* raycast(GameObj player, float angle, Tile map[], float *distance, float *side, float *hitPerc);
 
 #endif //WOLF3D_RAYCAST_H

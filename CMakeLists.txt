@@ -8,4 +8,12 @@ file(GLOB HEADERS *.h)
 
 file(GLOB STB_IMAGE vendor/stb/*)
 
-add_executable(Wolf3d WIN32 ${SOURCES} ${HEADERS} ${STB_IMAGE})
+add_executable(Wolf3d WIN32 ${SOURCES} ${HEADERS} ${STB_IMAGE}
+        tile.c
+        editor.h
+        editor.c
+        game.h
+        game.c
+        gameObject.h
+        gameObject.c
+        map.c)

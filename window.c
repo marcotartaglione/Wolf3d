@@ -21,7 +21,7 @@ void startWindow(WND_INSTANCE hInstance, void (*gameLoopFunction)(), void (*game
     int windowX = (screenWidth - WND_DFLT_WIDTH) / 2;
     int windowY = (screenHeight - WND_DFLT_HEIGHT) / 2;
 
-    windowHandle = CreateWindow(title, title, WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+    windowHandle = CreateWindow(title, title, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE,
                                 windowX, windowY, WND_DFLT_WIDTH, WND_DFLT_HEIGHT, NULL, NULL, hInstance, NULL);
 
     gameKeyCallback = gameKeyCallbackFunction;
@@ -41,6 +41,9 @@ void startWindow(WND_INSTANCE hInstance, void (*gameLoopFunction)(), void (*game
     }
 }
 
+void closeWindow() {
+    quit = true;
+}
 
 static void redraw() {
     InvalidateRect(windowHandle, NULL, FALSE);
@@ -51,8 +54,13 @@ static LRESULT CALLBACK WindowProcessMessage(HWND window_handle, UINT message, W
     switch (message) {
         case WM_QUIT:
         case WM_DESTROY: {
-            quit = true;
+            closeWindow();
         } break;
+
+        case WM_SETCURSOR: {
+            SetCursor(NULL);
+            return true;
+        }
 
         case WM_PAINT: {
             static PAINTSTRUCT paint;

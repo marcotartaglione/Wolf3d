@@ -40,6 +40,7 @@ extern Frame frame;
 //
 static void (*gameKeyCallback)(WPARAM);
 void startWindow(WND_INSTANCE hInstance, void (*gameLoopFunction)(), void (*gameKeyCallbackFunction)(WPARAM));
+void closeWindow();
 
 //
 // Internal functions
