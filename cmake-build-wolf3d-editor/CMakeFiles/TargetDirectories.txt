@@ -1,3 +1,0 @@
-C:/Users/akena/CLionProjects/Wolf3d/cmake-build-wolf3d-editor/CMakeFiles/Wolf3d.dir
-C:/Users/akena/CLionProjects/Wolf3d/cmake-build-wolf3d-editor/CMakeFiles/edit_cache.dir
-C:/Users/akena/CLionProjects/Wolf3d/cmake-build-wolf3d-editor/CMakeFiles/rebuild_cache.dir
