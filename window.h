@@ -1,11 +1,11 @@
 #ifndef WOLF3D_WINDOW_H
 #define WOLF3D_WINDOW_H
 
-#include <windows.h>
 #include "defs.h"
+#include <windows.h>
 
-#define WND_DFLT_WIDTH   1280
-#define WND_DFLT_HEIGHT  800
+#define WND_GAME_DFLT_WIDTH   1280
+#define WND_GAME_DFLT_HEIGHT  800
 
 #define WND_CLASS       WNDCLASS
 #define WND_HANDLE      HWND
@@ -38,8 +38,10 @@ extern Frame frame;
 //
 // External functions
 //
-static void (*gameKeyCallback)(WPARAM);
-void startWindow(WND_INSTANCE hInstance, void (*gameLoopFunction)(), void (*gameKeyCallbackFunction)(WPARAM));
+static void (*keyCallback)(u32int);
+static void (*mouseCallback)(u32int, u32int);
+
+void startWindow(WND_INSTANCE hInstance, void (*loopFunction)(), void (*keyCallbackFunction)(u32int), void (*mouseCallbackFunction)(u32int, u32int));
 void closeWindow();
 
 //

@@ -4,7 +4,7 @@
 #include "raycast.h"
 #include <math.h>
 
-Tile* raycast(GameObj player, float angle, Tile map[MAP_SIZE * MAP_SIZE], float *distance, float *side, float *hitPerc) {
+Tile* raycast(GameObj player, float angle, Map* map, float *distance, float *side, float *hitPerc) {
     float rayPosX = player.x;
     float rayPosY = player.y;
     float rayDirX = cos(angle);
@@ -38,7 +38,7 @@ Tile* raycast(GameObj player, float angle, Tile map[MAP_SIZE * MAP_SIZE], float 
         sideDistY = (mapY + 1.0 - rayPosY) * deltaDistY;
     }
 
-    while (map[(int)mapX + (int)mapY * MAP_SIZE].type == TILE_TYPE_NONE) {
+    while (map->tiles[(int)mapX + (int)mapY * MAP_SIZE].type == TILE_TYPE_NONE) {
         if (sideDistX < sideDistY) {
             sideDistX += deltaDistX;
             mapX += stepX;
@@ -62,5 +62,5 @@ Tile* raycast(GameObj player, float angle, Tile map[MAP_SIZE * MAP_SIZE], float 
 
     *distance = ABS(*distance) * cos(angle - player.angle);
 
-    return &map[(int)mapX + (int)mapY * MAP_SIZE];
+    return &map->tiles[(int)mapX + (int)mapY * MAP_SIZE];
 }

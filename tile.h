@@ -111,7 +111,11 @@ typedef enum {
     WALL_ELEVATOR5,
     WALL_NULL,
 } Wall;
-#define N_WALL (WALL_NULL)
+
+#define N_WALL                      (WALL_NULL)
+#define START_NO_DARK_VERIONS_WALL  (WALL_ELEVATOR1)
+
+const char* wallToString(Wall wall);
 
 typedef struct {
     TileType    type;
@@ -199,7 +203,5 @@ typedef struct {
 #define WLL_WD_5    { TILE_TYPE_WALL, WALL_WOOD5, TILE_STATE_IDLE, 0 }
 #define WLL_WD_7    { TILE_TYPE_WALL, WALL_WOOD7, TILE_STATE_IDLE, 0 }
 #define WLL_WD_9    { TILE_TYPE_WALL, WALL_WOOD9, TILE_STATE_IDLE, 0 }
-
-const char* wallToString(Wall wall);
 
 #endif //WOLF3D_TILE_H

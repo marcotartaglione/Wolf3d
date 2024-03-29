@@ -11,6 +11,7 @@
 #include "editor.h"
 
 Texture** walls;
+Map** maps;
 
 static void init();
 int ENTRY_POINT(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow);

@@ -6,34 +6,67 @@
 
 void editorLoop() {
     editorDrawMap();
+    editorDrawActiveTexture();
 }
 
 void editorKey(u32int key) {
+    switch (key) {
+        // up arrow
+        case 38: {
+            activeTexture = (activeTexture + 1) % N_WALL;
 
+            if (activeTexture < START_NO_DARK_VERIONS_WALL && activeTexture % 2) {
+                activeTexture++;
+            }
+        } break;
+        // down arrow
+        case 40: {
+            activeTexture = activeTexture - 1 >= 0 ? activeTexture - 1 : N_WALL;
+
+            if (activeTexture < START_NO_DARK_VERIONS_WALL && activeTexture % 2) {
+                activeTexture--;
+            }
+        } break;
+    }
+}
+
+void editorMouse(u32int x, u32int y) {
+    if (gridSize == -1 || cellSize == -1)
+        return;
+
+    int mapX = x / cellSize;
+    int mapY = y / cellSize;
+
+    if (mapX >= MAP_SIZE || mapY >= MAP_SIZE)
+        return;
+
+    maps[level]->tiles[mapX + mapY * MAP_SIZE].type = TILE_TYPE_NONE;
+    maps[level]->tiles[mapX + mapY * MAP_SIZE].wall = WALL_NULL;
+    maps[level]->tiles[mapX + mapY * MAP_SIZE].state = TILE_STATE_NULL;
 }
 
 static void editorDrawMap() {
-    int gridSize = (MIN(frame.width, frame.height) - (MAP_SIZE - 1)) / MAP_SIZE;
+    if (gridSize == -1 || cellSize == 1) {
+        gridSize = MIN(frame.width, frame.height);
+        cellSize = (float) gridSize / MAP_SIZE;
+    }
 
-    for (int i = 0; i < MAP_SIZE; ++i) {
-        for (int j = 0; j < MAP_SIZE; ++j) {
+    for (int j = 0; j < MAP_SIZE; ++j) {
+        for (int i = MAP_SIZE - 1; i >= 0; --i) {
 
-            Tile tile = maps[level][i * MAP_SIZE + j];
-            if (tile.type != TILE_TYPE_WALL || tile.wall == WALL_NULL)
-                continue;
-
+            Tile tile = maps[level]->tiles[j + i * MAP_SIZE];
             Texture *texture = walls[tile.wall];
 
-            float textureStepX = (float)texture->width / gridSize;
-            float textureStepY = (float)texture->height / gridSize;
+            float textureStepX = (float)texture->height / cellSize;
+            float textureStepY = (float)texture->width / cellSize;
 
-            int offsetX = (gridSize + 1) * i;
-            int offsetY = (gridSize + 1) * j;
+            int offsetX = cellSize * j;
+            int offsetY = cellSize * (MAP_SIZE - 1 - i);
 
-            for (int y = 0; y < gridSize; ++y) {
-                for (int x = 0; x < gridSize; ++x) {
-                    int textureX = (int)(x * textureStepX);
-                    int textureY = (int)(y * textureStepY);
+            for (int y = 0; y < cellSize; ++y) {
+                for (int x = 0; x < cellSize; ++x) {
+                    int textureX = (int)(y * textureStepX);
+                    int textureY = (int)((cellSize - 1 - x) * textureStepY);
 
                     u32int textureDataIndex = (textureX + textureY * texture->width) * 3;
                     u32int r = texture->data[textureDataIndex] << 16;
@@ -43,6 +76,37 @@ static void editorDrawMap() {
                     frame.pixels[(offsetX + x) + (offsetY + y) * frame.width] = r | g | b;
                 }
             }
+        }
+    }
+}
+
+static void editorDrawActiveTexture() {
+    static int padding = 30;
+    int textureSize = MAX(frame.width, frame.height) - gridSize - padding * 2;
+
+    int offsetX = 0;
+    int offsetY = 0;
+
+    if (frame.width - gridSize != 0) {
+        offsetX = gridSize;
+    } else {
+        offsetY = gridSize;
+    }
+
+    float textureStepX = (float)walls[activeTexture]->height / textureSize;
+    float textureStepY = (float)walls[activeTexture]->width / textureSize;
+
+    for (int y = 0; y < textureSize; ++y) {
+        for (int x = 0; x < textureSize; ++x) {
+            int textureX = (int)(y * textureStepX);
+            int textureY = (int)(x * textureStepY);
+
+            u32int textureDataIndex = (textureY + textureX * walls[activeTexture]->width) * 3;
+            u32int r = walls[activeTexture]->data[textureDataIndex] << 16;
+            u32int g = walls[activeTexture]->data[textureDataIndex + 1] << 8;
+            u32int b = walls[activeTexture]->data[textureDataIndex + 2];
+
+            frame.pixels[(offsetX + x) + (offsetY + y) * frame.width] = r | g | b;
         }
     }
 }

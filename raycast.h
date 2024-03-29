@@ -9,6 +9,6 @@
 #include "tile.h"
 #include "gameObject.h"
 
-Tile* raycast(GameObj player, float angle, Tile map[], float *distance, float *side, float *hitPerc);
+Tile* raycast(GameObj player, float angle, Map* map, float *distance, float *side, float *hitPerc);
 
 #endif //WOLF3D_RAYCAST_H

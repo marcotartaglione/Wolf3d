@@ -26,8 +26,8 @@
 //
 // Types
 //
-typedef unsigned int    u32int;
-typedef unsigned char   byte;
+typedef unsigned int u32int;
+typedef unsigned char byte;
 
 #define true 1
 #define false 0
@@ -53,5 +53,21 @@ typedef enum {
 #define ABS(x)      (x >= 0 ? x : -x)
 #define MIN(x, y)   (x < y ? x : y)
 #define MAX(x, y)   (x > y ? x : y)
+
+#ifndef WOLF3D_ERROR
+#include <stdio.h>
+#include <stdlib.h>
+
+static void Wolf3D_exit(int code, int line, char *file, char *error) {
+    fprintf(stderr, "%d error at:\n\t%s:%d -> %s", code, file, line, error);
+    exit(code);
+}
+
+#define WOLF3D_ERROR(code, string) do { \
+                            __debugbreak(); \
+                            Wolf3D_exit(code, __LINE__, __FILE__, string); \
+                            } while(0)
+#endif //WOLF3D_ERROR
+
 
 #endif //WOLF3D_DEFS_H

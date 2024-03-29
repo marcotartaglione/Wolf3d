@@ -5,7 +5,8 @@
 #include "string.h"
 #include <stdlib.h>
 
-Texture* readBMP(char* filename) {
+Texture* loadTexture(char* filename) {
+    // BMP file
     Texture *texture = malloc(sizeof(Texture));
 
     stbi_set_flip_vertically_on_load(1);
@@ -13,10 +14,10 @@ Texture* readBMP(char* filename) {
     return texture;
 }
 
-Texture** loadWalls(char* directory) {
+Texture** loadTexturesFolder(char* directory) {
     Texture** textures = (Texture**) malloc(sizeof(Texture*) * N_WALL);
 
-    for (int i = 0; i < N_WALL; ++i) {
+    for (int i = 0; i <= N_WALL; ++i) {
         char *copy = strdup(directory);
         const char *fileName = wallToString(i);
         char *filePath = malloc(strlen(copy) + strlen(fileName) + 5);
@@ -25,7 +26,7 @@ Texture** loadWalls(char* directory) {
         strcat(filePath, fileName);
         strcat(filePath, ".png");
 
-        textures[i] = readBMP(filePath);
+        textures[i] = loadTexture(filePath);
 
         free(copy);
         free(filePath);

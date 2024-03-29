@@ -3,7 +3,7 @@
 
 Frame frame = { 0 };
 
-void startWindow(WND_INSTANCE hInstance, void (*gameLoopFunction)(), void (*gameKeyCallbackFunction)(u32int)) {
+void startWindow(WND_INSTANCE hInstance, void (*loopFunction)(), void (*keyCallbackFunction)(u32int), void (*mouseCallbackFunction)(u32int, u32int)) {
     windowClass.lpfnWndProc = WindowProcessMessage;
     windowClass.hInstance = hInstance;
     windowClass.lpszClassName = title;
@@ -18,13 +18,14 @@ void startWindow(WND_INSTANCE hInstance, void (*gameLoopFunction)(), void (*game
     int screenWidth = GetSystemMetrics(SM_CXSCREEN);
     int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
-    int windowX = (screenWidth - WND_DFLT_WIDTH) / 2;
-    int windowY = (screenHeight - WND_DFLT_HEIGHT) / 2;
+    int windowX = (screenWidth - WND_GAME_DFLT_WIDTH) / 2;
+    int windowY = (screenHeight - WND_GAME_DFLT_HEIGHT) / 2;
 
     windowHandle = CreateWindow(title, title, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE,
-                                windowX, windowY, WND_DFLT_WIDTH, WND_DFLT_HEIGHT, NULL, NULL, hInstance, NULL);
+                                windowX, windowY, WND_GAME_DFLT_WIDTH, WND_GAME_DFLT_HEIGHT, NULL, NULL, hInstance, NULL);
 
-    gameKeyCallback = gameKeyCallbackFunction;
+    keyCallback = keyCallbackFunction;
+    mouseCallback = mouseCallbackFunction;
 
     if (windowHandle == NULL) {
         exit(-1);
@@ -36,7 +37,7 @@ void startWindow(WND_INSTANCE hInstance, void (*gameLoopFunction)(), void (*game
             DispatchMessage(&message);
         }
 
-        gameLoopFunction();
+        loopFunction();
         redraw();
     }
 }
@@ -90,7 +91,13 @@ static LRESULT CALLBACK WindowProcessMessage(HWND window_handle, UINT message, W
         } break;
 
         case WM_KEYDOWN: {
-            gameKeyCallback(wParam);
+            if (keyCallback != NULL)
+                keyCallback(wParam);
+        } break;
+
+        case WM_LBUTTONDOWN: {
+            if (mouseCallback != NULL)
+                mouseCallback(LOWORD(lParam), HIWORD(lParam));
         } break;
 
         default: {

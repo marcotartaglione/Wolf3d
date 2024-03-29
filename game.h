@@ -14,7 +14,6 @@
 static GameObj player = { 29.5f, 53.5f, 0, STATE_IDLE, DIRECTION_EAST };
 
 extern Texture** walls;
-extern Tile maps[MAP_NUMBER][MAP_SIZE * MAP_SIZE];
 
 static u32int level;
 

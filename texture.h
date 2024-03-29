@@ -16,7 +16,7 @@ typedef struct {
     byte    *data;
 } Texture;
 
-Texture* readBMP(char* filename);
-Texture** loadWalls(char* directory);
+Texture* loadTexture(char* filename);
+Texture** loadTexturesFolder(char* directory);
 
 #endif //WOLF3D_TEXTURE_H
