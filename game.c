@@ -52,7 +52,6 @@ static void gameDrawWalls() {
     float distance, side, perc;
     for (int column = 0; column < frame.width; ++column) {
         Tile *tile = raycast(player, perAngleTeta * (float)column - PLAYER_FOV * .5 + player.angle, maps[level], &distance, &side, &perc);
-        printf("%f\n", perc);
 
         if (tile->type == TILE_TYPE_WALL)
             gameDrawColumn(column, perc, distance, walls[tile->wall]);
@@ -61,21 +60,18 @@ static void gameDrawWalls() {
 
 static void gameDrawColumn(int column, float normalizedWidthPerc, float distance, Texture* texture) {
     int wallHeight = (int)((float)frame.height / distance);
-    int offset = wallHeight != frame.height ? (int)((frame.height - wallHeight) * 0.5) : 0;
+    int offset = (wallHeight != frame.height) ? (int)((frame.height - wallHeight) * 0.5) : 0;
 
     float heightStep = (float)wallHeight / (float)texture->height;
-    float currentStep = heightStep;
 
     float widthOffset = (float)texture->width * normalizedWidthPerc;
-    int textureIndex = 0;
 
-    for (int i = -MIN(0, offset); i < frame.height - offset && textureIndex < texture->height - 2; ++i) {
-        if (i > currentStep) {
-            currentStep += heightStep;
-            textureIndex++;
-        }
+    for (int i = -MIN(0, offset); i < frame.height - offset; ++i) {
+        int textureIndex = (int)((float)i / heightStep);
+        if (textureIndex >= texture->height - 2)
+            break;
 
-        u32int textureDataIndex = ((int)widthOffset + textureIndex * texture->width) * 3;
+        int textureDataIndex = ((int)widthOffset + textureIndex * texture->width) * 3;
         u32int r = texture->data[textureDataIndex] << 16;
         u32int g = texture->data[textureDataIndex + 1] << 8;
         u32int b = texture->data[textureDataIndex + 2];
