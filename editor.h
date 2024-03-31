@@ -22,7 +22,7 @@ static int activeTexture = 0;
 
 void editorLoop();
 void editorKey(u32int key);
-void editorMouse(u32int x, u32int y);
+void editorMouse(Click click, u32int x, u32int y);
 
 static void editorDrawMap();
 static void editorDrawActiveTexture();

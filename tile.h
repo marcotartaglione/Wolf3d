@@ -5,6 +5,8 @@
 #ifndef WOLF3D_TILE_H
 #define WOLF3D_TILE_H
 
+#include "defs.h"
+
 typedef enum {
     TILE_TYPE_WALL,
     TILE_TYPE_ENEMY,

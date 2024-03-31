@@ -3,10 +3,11 @@
 
 Frame frame = { 0 };
 
-void startWindow(WND_INSTANCE hInstance, void (*loopFunction)(), void (*keyCallbackFunction)(u32int), void (*mouseCallbackFunction)(u32int, u32int)) {
+void startWindow(WND_INSTANCE hInstance, void (*loopFunction)(), void (*keyCallbackFunction)(u32int), void (*mouseCallbackFunction)(Click, u32int, u32int)) {
     windowClass.lpfnWndProc = WindowProcessMessage;
     windowClass.hInstance = hInstance;
     windowClass.lpszClassName = title;
+
     RegisterClass(&windowClass);
 
     frame_bitmap_info.bmiHeader.biSize = sizeof(frame_bitmap_info.bmiHeader);
@@ -97,7 +98,12 @@ static LRESULT CALLBACK WindowProcessMessage(HWND window_handle, UINT message, W
 
         case WM_LBUTTONDOWN: {
             if (mouseCallback != NULL)
-                mouseCallback(LOWORD(lParam), HIWORD(lParam));
+                mouseCallback(CLICK_LEFT, LOWORD(lParam), HIWORD(lParam));
+        } break;
+
+        case WM_RBUTTONDOWN: {
+            if (mouseCallback != NULL)
+                mouseCallback(CLICK_RIGHT, LOWORD(lParam), HIWORD(lParam));
         } break;
 
         default: {

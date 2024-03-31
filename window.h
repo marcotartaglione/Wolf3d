@@ -33,15 +33,20 @@ typedef struct {
     u32int *pixels;
 } Frame;
 
+typedef enum {
+    CLICK_LEFT,
+    CLICK_RIGHT
+} Click;
+
 extern Frame frame;
 
 //
 // External functions
 //
 static void (*keyCallback)(u32int);
-static void (*mouseCallback)(u32int, u32int);
+static void (*mouseCallback)(Click, u32int, u32int);
 
-void startWindow(WND_INSTANCE hInstance, void (*loopFunction)(), void (*keyCallbackFunction)(u32int), void (*mouseCallbackFunction)(u32int, u32int));
+void startWindow(WND_INSTANCE hInstance, void (*loopFunction)(), void (*keyCallbackFunction)(u32int), void (*mouseCallbackFunction)(Click, u32int, u32int));
 void closeWindow();
 
 //

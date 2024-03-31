@@ -54,58 +54,59 @@ const char *floorToString(Floor floor) {
 
 Map *loadMap(char *filename) {
     if (filename == NULL)
-        WOLF3D_ERROR(-1, "Filename is null");
+        WOLF3D_ERROR("Filename is null");
 
     FILE *fp;
     fopen_s(&fp, filename, "rb");
 
     if (fp == NULL)
-        WOLF3D_ERROR(-1, "File was not found");
+        WOLF3D_ERROR("File was not found");
 
     Map *map = (Map *) malloc(sizeof(Map));
 
     if (fread(&map->floor, sizeof(Floor), 1, fp) != 1) {
-        WOLF3D_ERROR(-1, "Error reading map's floor");
+        WOLF3D_ERROR("Error reading map's floor");
     }
     if (fread(&map->episode, sizeof(Episode), 1, fp) != 1) {
-        WOLF3D_ERROR(-1, "Error reading map's episode");
+        WOLF3D_ERROR("Error reading map's episode");
     }
 
     map->tiles = (Tile *) malloc(sizeof(Tile) * MAP_SIZE * MAP_SIZE);
     if (map->tiles == NULL) {
-        WOLF3D_ERROR(-1, "Memory alloc error");
+        WOLF3D_ERROR("Memory alloc error");
     }
 
     if (fread(map->tiles, sizeof(Tile), MAP_SIZE * MAP_SIZE, fp) != MAP_SIZE * MAP_SIZE) {
-        WOLF3D_ERROR(-1, "Error reading map tiles");
+        WOLF3D_ERROR("Error reading map tiles");
     }
 
+    fclose(fp);
     return map;
 }
 
 Map **loadMapsFolder(char *directory) {
     Map **maps = (Map **) malloc(sizeof(Map *) * N_WALL);
     if (maps == NULL) {
-        WOLF3D_ERROR(-1, "Memory alloc failed");
+        WOLF3D_ERROR("Memory alloc failed");
     }
 
     char *copy = _strdup(directory);
     if (copy == NULL) {
         free(maps);
-        WOLF3D_ERROR(-1, "Directory string copy error");
+        WOLF3D_ERROR("Directory string copy error");
     }
 
     // TODO cambiare controlli a N_EPISODES e N_FLOORS
     for (int episode = 0; episode < EPISODE_2; ++episode) {
         for (int floor = 0; floor < FLOOR_2; ++floor) {
-            char *filePath = generateFilePath(episode, floor, directory);
+            char *filePath = generateMapFilePath(episode, floor, directory);
             if (filePath == NULL) {
                 free(copy);
                 for (int i = 0; i < episode * N_EPISODES + floor; ++i) {
                     free(maps[i]);
                 }
                 free(maps);
-                WOLF3D_ERROR(-1, "File path generation fail");
+                WOLF3D_ERROR("File path generation fail");
             }
 
             maps[episode * N_EPISODES + floor] = loadMap(filePath);
@@ -117,41 +118,41 @@ Map **loadMapsFolder(char *directory) {
     return maps;
 }
 
-void saveMap(Map *map, char* directory) {
+void saveMap(Map *map, char *directory) {
     if (map == NULL) {
-        WOLF3D_ERROR(-1, "Map was null");
+        WOLF3D_ERROR("Map was null");
     }
 
-    char* filePath = generateFilePath(map->episode, map->floor, directory);
+    char *filePath = generateMapFilePath(map->episode, map->floor, directory);
     if (filePath == NULL) {
-        WOLF3D_ERROR(-1, "File path generation fail");
+        WOLF3D_ERROR("File path generation fail");
     }
 
     FILE *fp;
     fopen_s(&fp, filePath, "wb");
     if (fp == NULL) {
-        WOLF3D_ERROR(-1, "Error opening file for writing");
+        WOLF3D_ERROR("Error opening file for writing");
     }
 
     if (fwrite(&map->floor, sizeof(Floor), 1, fp) != 1) {
         fclose(fp);
-        WOLF3D_ERROR(-1, "Error writing map's floor");
+        WOLF3D_ERROR("Error writing map's floor");
     }
 
     if (fwrite(&map->episode, sizeof(Episode), 1, fp) != 1) {
         fclose(fp);
-        WOLF3D_ERROR(-1, "Error writing map's episode");
+        WOLF3D_ERROR("Error writing map's episode");
     }
 
     if (fwrite(map->tiles, sizeof(Tile), MAP_SIZE * MAP_SIZE, fp) != MAP_SIZE * MAP_SIZE) {
         fclose(fp);
-        WOLF3D_ERROR(-1, "Error writing map tiles");
+        WOLF3D_ERROR("Error writing map tiles");
     }
 
     fclose(fp);
 }
 
-static char *generateFilePath(Episode episode, Floor floor, char *parentDirectory) {
+static char *generateMapFilePath(Episode episode, Floor floor, char *parentDirectory) {
     const char *episodeString = episodeToString(episode);
     const char *floorString = floorToString(floor);
 
@@ -165,7 +166,7 @@ static char *generateFilePath(Episode episode, Floor floor, char *parentDirector
             free(maps[i]);
         }
         free(maps);
-        WOLF3D_ERROR(-1, "Memory alloc failed");
+        WOLF3D_ERROR("Memory alloc failed");
     }
 
     if (parentDirectory) {

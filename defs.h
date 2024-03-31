@@ -5,7 +5,7 @@
 // Constants
 //
 #define ENTRY_POINT (WINAPI wWinMain)
-#define WOLF3D_EDITOR_MODE
+//#define WOLF3D_EDITOR_MODE
 
 #define PI                  3.14159265359   // PI           -> 180deg
 #define PI_times_2          6.28318530718   // PI * 2       ->   0deg / 360deg
@@ -63,9 +63,9 @@ static void Wolf3D_exit(int code, int line, char *file, char *error) {
     exit(code);
 }
 
-#define WOLF3D_ERROR(code, string) do { \
+#define WOLF3D_ERROR(string) do { \
                             __debugbreak(); \
-                            Wolf3D_exit(code, __LINE__, __FILE__, string); \
+                            Wolf3D_exit(-1, __LINE__, __FILE__, string); \
                             } while(0)
 #endif //WOLF3D_ERROR
 

@@ -46,7 +46,7 @@ Map* loadMap(char* filename);
 Map** loadMapsFolder(char* directory);
 void saveMap(Map *map, char* directory);
 
-static char *generateFilePath(Episode episode, Floor floor, char *parentDirectory);
+static char *generateMapFilePath(Episode episode, Floor floor, char *parentDirectory);
 
 int mapValidatePosition(u32int level, float x, float y);
 
