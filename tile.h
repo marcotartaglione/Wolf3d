@@ -9,6 +9,7 @@
 
 typedef enum {
     TILE_TYPE_WALL,
+    TILE_TYPE_DOOR,
     TILE_TYPE_ENEMY,
     TILE_TYPE_DROP,
     TILE_TYPE_NONE

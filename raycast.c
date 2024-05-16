@@ -38,7 +38,7 @@ Tile* raycast(GameObj player, float angle, Map* map, float *distance, float *sid
         sideDistY = (mapY + 1.0 - rayPosY) * deltaDistY;
     }
 
-    while (map->tiles[(int)mapX + (int)mapY * MAP_SIZE].type == TILE_TYPE_NONE) {
+    while (map->tiles[(int)mapX + (int)mapY * MAP_SIZE].type != TILE_TYPE_WALL) {
         if (sideDistX < sideDistY) {
             sideDistX += deltaDistX;
             mapX += stepX;
