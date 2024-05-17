@@ -3,6 +3,16 @@
 //
 #include "tile.h"
 
+Tile *cloneTile(Tile *tile) {
+    Tile *result = malloc(sizeof(Tile));
+    result->type = tile->type;
+    result->wall = tile->wall;
+    result->movedPerc = tile->movedPerc;
+    result->state = tile->state;
+
+    return result;
+}
+
 const char *wallToString(Wall wall) {
     // Jesus, please forgive me
     switch (wall) {

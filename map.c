@@ -150,6 +150,7 @@ void saveMap(Map *map, char *directory) {
     }
 
     fclose(fp);
+    fwrite("Map saved\n", 10, 1, stdout);
 }
 
 static char *generateMapFilePath(Episode episode, Floor floor, char *parentDirectory) {
@@ -183,5 +184,6 @@ static char *generateMapFilePath(Episode episode, Floor floor, char *parentDirec
 }
 
 int mapValidatePosition(u32int level, float x, float y) {
-    return maps[level]->tiles[(int) y * MAP_SIZE + (int) x].type != TILE_TYPE_WALL;
+    TileType tileType = maps[level]->tiles[(int) y * MAP_SIZE + (int) x].type;
+    return tileType != TILE_TYPE_WALL && tileType != TILE_TYPE_DOOR;
 }

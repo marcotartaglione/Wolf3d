@@ -17,7 +17,8 @@ typedef enum {
 
 typedef enum {
     TILE_STATE_IDLE,
-    TILE_STATE_MOVING,
+    TILE_STATE_OPENING,
+    TILE_STATE_CLOSING,
     TILE_STATE_SHOOTING,
     TILE_STATE_DEAD,
     TILE_STATE_NULL,
@@ -118,6 +119,11 @@ typedef enum {
 #define N_WALL                      (WALL_NULL)
 #define START_NO_DARK_VERIONS_WALL  (WALL_ELEVATOR1)
 
+#define WALL_DOORS_START            (WALL_DOOR1)
+#define WALL_DOORS_END              (WALL_DOOR8)
+
+#define IS_DOOR(x)                  ((x) >= WALL_DOORS_START && (x) <= WALL_DOORS_END)
+
 const char* wallToString(Wall wall);
 
 typedef struct {
@@ -126,6 +132,8 @@ typedef struct {
     TileState   state;
     float       movedPerc;
 } Tile;
+
+Tile* cloneTile(Tile *tile);
 
 #define TILE_MT     { TILE_TYPE_NONE, WALL_NULL, TILE_STATE_NULL, 0 }
 

@@ -4,9 +4,9 @@
 #include "raycast.h"
 #include <math.h>
 
-Tile* raycast(GameObj player, float angle, Map* map, float *distance, float *side, float *hitPerc) {
-    float rayPosX = player.x;
-    float rayPosY = player.y;
+Tile* filteredRaycast(GameObj *player, float angle, Map* map, TileType filter, float maxDistance, float *distance, int *side, float *hitPerc) {
+    float rayPosX = player->x;
+    float rayPosY = player->y;
     float rayDirX = cos(angle);
     float rayDirY = sin(angle);
 
@@ -16,8 +16,8 @@ Tile* raycast(GameObj player, float angle, Map* map, float *distance, float *sid
     float sideDistX;
     float sideDistY;
 
-    float deltaDistX = sqrt(1 + (rayDirY * rayDirY) / (rayDirX * rayDirX));
-    float deltaDistY = sqrt(1 + (rayDirX * rayDirX) / (rayDirY * rayDirY));
+    float deltaDistX = sqrtf(1 + (rayDirY * rayDirY) / (rayDirX * rayDirX));
+    float deltaDistY = sqrtf(1 + (rayDirX * rayDirX) / (rayDirY * rayDirY));
 
     int stepX;
     int stepY;
@@ -38,7 +38,15 @@ Tile* raycast(GameObj player, float angle, Map* map, float *distance, float *sid
         sideDistY = (mapY + 1.0 - rayPosY) * deltaDistY;
     }
 
-    while (map->tiles[(int)mapX + (int)mapY * MAP_SIZE].type != TILE_TYPE_WALL) {
+    bool wasDoor = false;
+    TileType tileType;
+    while (wasDoor == false && mapX >= 0 && mapX < MAP_SIZE && mapY >= 0 && mapY < MAP_SIZE) {
+        tileType = map->tiles[(int)mapX + (int)mapY * MAP_SIZE].type;
+
+        if (tileType == filter || (tileType != TILE_TYPE_NONE && tileType != TILE_TYPE_DOOR)) {
+            break;
+        }
+
         if (sideDistX < sideDistY) {
             sideDistX += deltaDistX;
             mapX += stepX;
@@ -50,6 +58,9 @@ Tile* raycast(GameObj player, float angle, Map* map, float *distance, float *sid
         }
     }
 
+    if (mapX < 0 || mapX >= MAP_SIZE || mapY < 0 || mapY >= MAP_SIZE || *distance >= maxDistance || (tileType != filter && tileType != TILE_TYPE_NONE))
+        return NULL;
+
     if (*side == 0) {
         *distance = fabs((mapX - rayPosX + (1.0 - stepX) / 2.0) / rayDirX);
         *hitPerc = rayPosY + rayDirY * (*distance);
@@ -60,7 +71,30 @@ Tile* raycast(GameObj player, float angle, Map* map, float *distance, float *sid
         *hitPerc = *hitPerc - (int)*hitPerc;
     }
 
-    *distance = ABS(*distance) * cos(angle - player.angle);
+    // TODO la porta deve essere più dentro rispetto ai muri quindi capire quando bisogna disegnare la parte laterale oppure a porta stessa
 
-    return &map->tiles[(int)mapX + (int)mapY * MAP_SIZE];
+    // deve essere una copia
+    // potrebbe essere necessario modificare la Tile senza modificare l'originale nella mappa
+    Tile *result = cloneTile(&map->tiles[(int)mapX + (int)mapY * MAP_SIZE]);
+
+    // se un muro è adiacente a una porta allora la texture di contatto deve cambiare
+    if (*side == 0) {
+        if (mapX > 0 && IS_DOOR(map->tiles[(int)(mapX - 1) + (int)mapY * MAP_SIZE].wall)) {
+            result->wall = WALL_DOORSLOT1;
+        }
+        if (mapX < MAP_SIZE - 1 && IS_DOOR(map->tiles[(int)(mapX + 1) + (int)mapY * MAP_SIZE].wall)) {
+            result->wall = WALL_DOORSLOT1;
+        }
+    } else {
+        if (mapY > 0 && IS_DOOR(map->tiles[(int)mapX + (int)(mapY - 1) * MAP_SIZE].wall)) {
+            result->wall = WALL_DOORSLOT1;
+        }
+        if (mapY < MAP_SIZE - 1 && IS_DOOR(map->tiles[(int)mapX + (int)(mapY + 1) * MAP_SIZE].wall)) {
+            result->wall = WALL_DOORSLOT1;
+        }
+    }
+
+    *distance = ABS(*distance) * cosf(angle - player->angle);
+
+    return result;
 }

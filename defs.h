@@ -23,11 +23,14 @@
 #define ROT_SPEED (PI / 20)
 #define MOV_SPEED 0.25f
 
+#define DOOR_RECESS 0.2f
+
 //
 // Types
 //
 typedef unsigned int u32int;
 typedef unsigned char byte;
+typedef byte bool;
 
 #define true 1
 #define false 0
@@ -49,10 +52,10 @@ typedef enum {
 //
 // Functions
 //
-#define SIGN(x)     (x >= 0 ? 1 : -1)
-#define ABS(x)      (x >= 0 ? x : -x)
-#define MIN(x, y)   (x < y ? x : y)
-#define MAX(x, y)   (x > y ? x : y)
+#define SIGN(x)     ((x) >= 0  ?  1  :  -1)
+#define ABS(x)      ((x) >= 0  ? (x) : -(x))
+#define MIN(x, y)   ((x) < (y) ? (x) :  (y))
+#define MAX(x, y)   ((x) > (y) ? (x) :  (y))
 
 #ifndef WOLF3D_ERROR
 #include <stdio.h>

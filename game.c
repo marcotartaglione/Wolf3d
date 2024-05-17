@@ -5,7 +5,7 @@
 
 void gameLoop() {
     gameDrawBackground();
-    gameDrawWalls();
+    gameDrawMap();
 }
 
 void gameKey(u32int key) {
@@ -42,19 +42,37 @@ static void gameDrawBackground() {
     }
 }
 
-static void gameDrawWalls() {
+static void gameDrawMap() {
+    gameDrawAndUpdateWalls();
+    gameDrawAndUpdateDoors();
+}
+
+static void gameDrawAndUpdateWalls() {
+    gameDrawMapFiltered(TILE_TYPE_WALL);
+}
+
+static void gameDrawAndUpdateDoors() {
+    gameDrawMapFiltered(TILE_TYPE_DOOR);
+}
+
+static void gameDrawMapFiltered(TileType filter) {
     static float perAngleTeta = -1;
 
     if (perAngleTeta == -1) {
         perAngleTeta = PLAYER_FOV / frame.width;
     }
 
-    float distance, side, perc;
+    float distance, perc;
+    int side;
     for (int column = 0; column < frame.width; ++column) {
-        Tile *tile = raycast(player, perAngleTeta * (float)column - PLAYER_FOV * .5 + player.angle, maps[level], &distance, &side, &perc);
+        Tile *tile = filteredRaycast(&player, perAngleTeta * (float) column - PLAYER_FOV * .5f + player.angle,
+                                     maps[level], filter, 100, &distance, &side, &perc);
 
-        if (tile->type == TILE_TYPE_WALL)
-            gameDrawColumn(column, perc, distance, walls[tile->wall]);
+        if (tile == NULL)
+            continue;
+
+        gameDrawColumn(column, perc, distance, walls[tile->wall]);
+        free(tile);
     }
 }
 

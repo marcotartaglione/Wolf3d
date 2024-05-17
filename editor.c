@@ -43,13 +43,16 @@ void editorMouse(Click click, u32int x, u32int y) {
     if (mapX >= MAP_SIZE || mapY >= MAP_SIZE)
         return;
 
-    if (activeTexture >= WALL_DOOR1 && activeTexture <= WALL_DOOR8) {
-        maps[level]->tiles[mapX + mapY * MAP_SIZE].type = click == CLICK_LEFT ? TILE_TYPE_DOOR : TILE_TYPE_NONE;
-    } else {
-        maps[level]->tiles[mapX + mapY * MAP_SIZE].type = click == CLICK_LEFT ? TILE_TYPE_WALL : TILE_TYPE_NONE;
+    if (click == CLICK_RIGHT) {
+        maps[level]->tiles[mapX + mapY * MAP_SIZE].type = TILE_TYPE_NONE;
+        maps[level]->tiles[mapX + mapY * MAP_SIZE].wall = WALL_NULL;
+        maps[level]->tiles[mapX + mapY * MAP_SIZE].state = TILE_STATE_NULL;
+
+        return;
     }
 
-    maps[level]->tiles[mapX + mapY * MAP_SIZE].wall = click == CLICK_LEFT ? activeTexture : WALL_NULL;
+    maps[level]->tiles[mapX + mapY * MAP_SIZE].type = IS_DOOR(activeTexture) ? TILE_TYPE_DOOR : TILE_TYPE_WALL;
+    maps[level]->tiles[mapX + mapY * MAP_SIZE].wall = activeTexture;
     maps[level]->tiles[mapX + mapY * MAP_SIZE].state = TILE_STATE_NULL;
 }
 

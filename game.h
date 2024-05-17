@@ -27,7 +27,12 @@ void gameKey(u32int key);
 // Internal functions
 //
 static void gameDrawBackground();
-static void gameDrawWalls();
+
+static void gameDrawMap();
+static void gameDrawAndUpdateWalls();
+static void gameDrawAndUpdateDoors();
+
+static void gameDrawMapFiltered(TileType filter);
 static void gameDrawColumn(int column, float normalizedWidthPerc, float distance, Texture* texture);
 
 #endif //WOLF3D_GAME_H
