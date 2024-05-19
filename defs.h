@@ -7,6 +7,8 @@
 #define ENTRY_POINT (WINAPI wWinMain)
 //#define WOLF3D_EDITOR_MODE
 
+#define TARGET_FPS          60
+
 #define PI                  3.14159265359   // PI           -> 180deg
 #define PI_times_2          6.28318530718   // PI * 2       ->   0deg / 360deg
 #define PI_div_2            1.57079632679   // PI / 2       ->  90deg
@@ -23,7 +25,8 @@
 #define ROT_SPEED (PI / 20)
 #define MOV_SPEED 0.25f
 
-#define DOOR_RECESS 0.2f
+#define DOOR_RECESS         0.2f
+#define MOVE_ANIMATION_SEC  2.0f
 
 //
 // Types

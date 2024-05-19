@@ -1,9 +1,10 @@
 #include "window.h"
 #include "defs.h"
 
-Frame frame = { 0 };
+Frame frame = {0};
 
-void startWindow(WND_INSTANCE hInstance, void (*loopFunction)(), void (*keyCallbackFunction)(u32int), void (*mouseCallbackFunction)(Click, u32int, u32int)) {
+void startWindow(WND_INSTANCE hInstance, void (*loopFunction)(), void (*keyCallbackFunction)(u32int),
+                 void (*mouseCallbackFunction)(Click, u32int, u32int), byte targetFps) {
     windowClass.lpfnWndProc = WindowProcessMessage;
     windowClass.hInstance = hInstance;
     windowClass.lpszClassName = title;
@@ -23,7 +24,8 @@ void startWindow(WND_INSTANCE hInstance, void (*loopFunction)(), void (*keyCallb
     int windowY = (screenHeight - WND_GAME_DFLT_HEIGHT) / 2;
 
     windowHandle = CreateWindow(title, title, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE,
-                                windowX, windowY, WND_GAME_DFLT_WIDTH, WND_GAME_DFLT_HEIGHT, NULL, NULL, hInstance, NULL);
+                                windowX, windowY, WND_GAME_DFLT_WIDTH, WND_GAME_DFLT_HEIGHT, NULL, NULL, hInstance,
+                                NULL);
 
     keyCallback = keyCallbackFunction;
     mouseCallback = mouseCallbackFunction;
@@ -32,14 +34,17 @@ void startWindow(WND_INSTANCE hInstance, void (*loopFunction)(), void (*keyCallb
         exit(-1);
     }
 
+    windowTargetFps = targetFps;
+    initTimer();
     while (!quit) {
-        static MSG message = { 0 };
+        static MSG message = {0};
         while (PeekMessage(&message, NULL, 0, 0, PM_REMOVE)) {
             DispatchMessage(&message);
         }
 
         loopFunction();
         redraw();
+        waitForNextFrame();
     }
 }
 
@@ -57,7 +62,8 @@ static LRESULT CALLBACK WindowProcessMessage(HWND window_handle, UINT message, W
         case WM_QUIT:
         case WM_DESTROY: {
             closeWindow();
-        } break;
+        }
+            break;
 
 #ifndef WOLF3D_EDITOR_MODE
         case WM_SETCURSOR: {
@@ -72,43 +78,64 @@ static LRESULT CALLBACK WindowProcessMessage(HWND window_handle, UINT message, W
             device_context = BeginPaint(window_handle, &paint);
             BitBlt(device_context,
                    paint.rcPaint.left, paint.rcPaint.top,
-                   paint.rcPaint.right - paint.rcPaint.left,paint.rcPaint.bottom - paint.rcPaint.top,
+                   paint.rcPaint.right - paint.rcPaint.left, paint.rcPaint.bottom - paint.rcPaint.top,
                    frame_device_context,
                    paint.rcPaint.left, paint.rcPaint.top,
                    SRCCOPY);
             EndPaint(window_handle, &paint);
-        } break;
+        }
+            break;
 
         case WM_SIZE: {
             frame_bitmap_info.bmiHeader.biWidth = LOWORD(lParam);
             frame_bitmap_info.bmiHeader.biHeight = HIWORD(lParam);
 
             if (frame_bitmap) DeleteObject(frame_bitmap);
-            frame_bitmap = CreateDIBSection(NULL, &frame_bitmap_info, DIB_RGB_COLORS, (void**)&frame.pixels, 0, 0);
+            frame_bitmap = CreateDIBSection(NULL, &frame_bitmap_info, DIB_RGB_COLORS, (void **) &frame.pixels, 0, 0);
             SelectObject(frame_device_context, frame_bitmap);
 
             frame.width = LOWORD(lParam);
             frame.height = HIWORD(lParam);
-        } break;
+        }
+            break;
 
         case WM_KEYDOWN: {
             if (keyCallback != NULL)
                 keyCallback(wParam);
-        } break;
+        }
+            break;
 
         case WM_LBUTTONDOWN: {
             if (mouseCallback != NULL)
                 mouseCallback(CLICK_LEFT, LOWORD(lParam), HIWORD(lParam));
-        } break;
+        }
+            break;
 
         case WM_RBUTTONDOWN: {
             if (mouseCallback != NULL)
                 mouseCallback(CLICK_RIGHT, LOWORD(lParam), HIWORD(lParam));
-        } break;
+        }
+            break;
 
         default: {
             return DefWindowProc(window_handle, message, wParam, lParam);
         }
     }
     return 0;
+}
+
+static void initTimer() {
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&lastTime);
+}
+
+static void waitForNextFrame() {
+    while (true) {
+        QueryPerformanceCounter(&currentTime);
+        LONGLONG elapsedTime = currentTime.QuadPart - lastTime.QuadPart;
+        if ((elapsedTime * 1000 / frequency.QuadPart) >= WND_FRAME_TIME) {
+            lastTime = currentTime;
+            break;
+        }
+    }
 }

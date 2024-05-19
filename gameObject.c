@@ -17,8 +17,8 @@ void gameObjRotate(GameObj *gameObj, float rotation) {
 }
 
 void gameObjMove(GameObj *gameObj, float movement, u32int level) {
-    float dX = cos(gameObj->angle);
-    float dY = sin(gameObj->angle);
+    float dX = cosf(gameObj->angle);
+    float dY = sinf(gameObj->angle);
 
     float newX = gameObj->x + dX * (movement + 0.3 * SIGN(movement));
     float newY = gameObj->y + dY * (movement + 0.3 * SIGN(movement));

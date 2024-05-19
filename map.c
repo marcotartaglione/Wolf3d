@@ -187,3 +187,23 @@ int mapValidatePosition(u32int level, float x, float y) {
     TileType tileType = maps[level]->tiles[(int) y * MAP_SIZE + (int) x].type;
     return tileType != TILE_TYPE_WALL && tileType != TILE_TYPE_DOOR;
 }
+
+void mapInteract(u32int level, float x, float y) {
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            if (i == 0 && j == 0)
+                continue;
+
+            Tile *tile = &maps[level]->tiles[(int)(x) + i + ((int)y + j) * MAP_SIZE];
+
+            if (tile->type != TILE_TYPE_DOOR)
+                continue;
+
+            switch (tile->state) {
+                case TILE_STATE_IDLE:
+                    tile->state = TILE_STATE_OPENING;
+                    break;
+            }
+        }
+    }
+}

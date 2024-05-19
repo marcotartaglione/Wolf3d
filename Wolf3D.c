@@ -15,9 +15,9 @@ int ENTRY_POINT(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, in
     init();
 
 #ifndef WOLF3D_EDITOR_MODE
-    startWindow(hInstance, gameLoop, gameKey, NULL);
+    startWindow(hInstance, gameLoop, gameKey, NULL, TARGET_FPS);
 #else
-    startWindow(hInstance, editorLoop, editorKey, editorMouse);
+    startWindow(hInstance, editorLoop, editorKey, editorMouse, TARGET_FPS);
 #endif
 
 }

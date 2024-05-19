@@ -49,6 +49,7 @@ void saveMap(Map *map, char* directory);
 static char *generateMapFilePath(Episode episode, Floor floor, char *parentDirectory);
 
 int mapValidatePosition(u32int level, float x, float y);
+void mapInteract(u32int level, float x, float y);
 
 Map** maps;
 
